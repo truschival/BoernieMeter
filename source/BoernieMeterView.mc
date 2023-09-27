@@ -6,10 +6,10 @@ using Toybox.UserProfile as User;
 
 const BOERNIE_CONST = 3.375f;
 const CNT_HYSTERESIS = 5;
-const UPPER_THRES = 0.81;
-const LOWER_THRES = 0.79;
+const UPPER_THRES = 1.1;
+const LOWER_THRES = 0.95;
 
-class BoernieMeterView extends WatchUi.DataField {
+class BoernieMeterView extends WatchUi.DataField{
     hidden var curBoernie as Float;
     hidden var userWeight as Float;
 
@@ -36,28 +36,29 @@ class BoernieMeterView extends WatchUi.DataField {
         }
     }
 
+
     // Set your layout here. Anytime the size of obscurity of
     // the draw context is changed this will be called.
     function onLayout(dc as Dc) as Void {
         View.setLayout(Rez.Layouts.MainLayout(dc));
-        var labelView = View.findDrawableById("unit_label") as Text;
-        labelView.locY = labelView.locY - 16;
+        //var labelView = View.findDrawableById("unit_label") as Text;
+        // labelView.locY = labelView.locY - 16;
         var valueView = View.findDrawableById("value") as Text;
-        valueView.locY = valueView.locY + 7;
+        var infoView = View.findDrawableById("info") as Text;
+        infoView.locY = valueView.locY + 35;
         (View.findDrawableById("unit_label") as Text).setText(Rez.Strings.unit_label);
     }
+
 
     // The given info object contains all the current workout information.
     // Calculate a value and save it locally in this method.
     // Note that compute() and onUpdate() are asynchronous, and there is no
     // guarantee that compute() will be called before onUpdate().
     function compute(info as Activity.Info) as Void {
-        
-        // See Activity.Info in the documentation for available information.
-        if(! (info has :currentPower) ){
-            System.println("Need a Powermeter!");
+
+        if(! (info has :currentPower) ){    System.println("Need a Powermeter!");
             me.info = Rez.Strings.noPwrMeter;
-            return;
+                    return;
         }
         
         if(info.currentPower != null){
@@ -74,11 +75,19 @@ class BoernieMeterView extends WatchUi.DataField {
             if (!alarmRaised){
                 alarmRaised = true;
                 me.info = Rez.Strings.almBoernieThresholdExceeded;
+                if (Attention has :ToneProfile) {
+                    var toneProfile =
+                    [
+                        new Attention.ToneProfile( 2500, 250),
+                        new Attention.ToneProfile( 5000, 350),
+                        new Attention.ToneProfile( 2500, 250)
+                    ];
+                    Attention.playTone({:toneProfile=>toneProfile});
+                }
             }
         } else{
             me.info = "";
             alarmRaised = false;
-            me.info = Rez.Strings.AppName;
         }
     }
 
@@ -106,17 +115,19 @@ class BoernieMeterView extends WatchUi.DataField {
         // Set the background color
         (View.findDrawableById("Background") as Text).setColor(getBackgroundColor());
 
-        (View.findDrawableById("info") as Text).setText(me.info);
+        var infolabel = View.findDrawableById("info") as Text;
+        infolabel.setText(me.info);
 
         // Set the foreground color and value
         var value = View.findDrawableById("value") as Text;
-        if (getBackgroundColor() == Graphics.COLOR_BLACK) {
-            value.setColor(Graphics.COLOR_WHITE);
-        } else {
-            value.setColor(Graphics.COLOR_BLACK);
-        }
+        var foregroundColor = (getBackgroundColor() == Graphics.COLOR_BLACK) ? Graphics.COLOR_WHITE : Graphics.COLOR_BLACK;
+   
         if (me.alarmRaised){
             value.setColor(Graphics.COLOR_RED);
+            infolabel.setColor(Graphics.COLOR_RED);
+        }else{
+            value.setColor(foregroundColor);
+            infolabel.setColor(foregroundColor);
         }
 
         value.setText(me.curBoernie.format("%.2f"));
