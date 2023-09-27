@@ -1,0 +1,7 @@
+<strings>
+    <string id="AppName">BoernieMeter</string>
+    <string id="unit_label">[Bö]</string>
+    <string id="noPwrMeter">"Need a Powermeter!"</string>
+    <string id="noUsrWeight">"Need user weight!"</string>
+    <string id="almBoernieThresholdExceeded">"Go slower!"</string>
+</strings>
