@@ -38,7 +38,8 @@ class BoernieMeterView extends WatchUi.DataField{
     // Set your layout here. Anytime the size of obscurity of
     // the draw context is changed this will be called.
     function onLayout(dc as Dc) as Void {
-        if(dc.getWidth() > 130){
+        //System.println("on_layout " + dc.getWidth() + " x " + dc.getHeight() );
+        if(dc.getWidth() > 145 ){
             if (dc.getHeight() > 65){
                 View.setLayout(Rez.Layouts.FullLayout(dc));
             }
@@ -63,7 +64,6 @@ class BoernieMeterView extends WatchUi.DataField{
     // Note that compute() and onUpdate() are asynchronous, and there is no
     // guarantee that compute() will be called before onUpdate().
     function compute(info as Activity.Info) as Void {
-
         if(! (info has :currentPower) ){
             System.println("Need a Powermeter!");
             me.info = Rez.Strings.noPwrMeter;
@@ -75,7 +75,6 @@ class BoernieMeterView extends WatchUi.DataField{
             pwr = pwr / me.userWeight;
             me.curBoernie = pwr / BOERNIE_CONST;
         }
-
         updateCounters();
     }
 
@@ -124,7 +123,7 @@ class BoernieMeterView extends WatchUi.DataField{
         // Set the background color
         (View.findDrawableById("Background") as Text).setColor(getBackgroundColor());
 
-                // Determine Color for value and info
+        // Determine Color for value and info
         var foregroundColor = (getBackgroundColor() == Graphics.COLOR_BLACK) ?
             Graphics.COLOR_WHITE : Graphics.COLOR_BLACK;
         foregroundColor = (me.alarmRaised) ?
@@ -141,8 +140,6 @@ class BoernieMeterView extends WatchUi.DataField{
             infolabel.setText(me.info);
             infolabel.setColor(foregroundColor);
         }
-
-        System.println(" update " + me.curBoernie.format("%.2f"));
         // Call parent's onUpdate(dc) to redraw the layout
         View.onUpdate(dc);
     }

@@ -1,0 +1,18 @@
+<strings>
+    <string id="AppName">BoernieMeter</string>
+    <string id="AppVersionTitle">Version</string>
+    <string id="unitLabel">[Bö]</string>
+
+    <string id="hysteresisLabel">Alarm Hysterese [s]</string>
+    <string id="hysteresisPrompt">Zeit bis Alarm</string>
+
+    <string id="lThresLabel">Untere Schwelle</string>
+    <string id="lThresPrompt">untere Grenze [Bö]</string>
+
+    <string id="hThresLabel">Obere Schwelle</string>
+    <string id="hThresPrompt">obere Grenze [Bö]</string>
+
+    <string id="noPwrMeter">"Du brauchst ein Powermeter!"</string>
+    <string id="noUsrWeight">"Gib Dein Gewicht ein!"</string>
+    <string id="almBoernieThresholdExceeded">Langsam, Börnie kommt nicht nach!</string>
+</strings>

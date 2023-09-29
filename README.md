@@ -27,3 +27,5 @@ threshold (default 0.95 Bö)
 
 * User Profile - for reading your weight to calculate your personal
   Börnie-Rating.
+
+* Datafield Alert - for acustic alarms.
