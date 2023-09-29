@@ -1,9 +1,56 @@
 <layouts>
-    <!-- A generic, centered layout. -->
-    <layout id="MainLayout">
+    <!-- Full layout for areas > 130x65-->
+    <layout id="FullLayout">
         <drawable class="Background" />
-        <label id="value"       x="35%" y="5" color="Graphics.COLOR_BLACK" justification="Graphics.TEXT_JUSTIFY_LEFT" font="Graphics.FONT_LARGE" />
-        <label id="unit_label"  x="70%" y="5" color="Graphics.COLOR_BLACK" justification="Graphics.TEXT_JUSTIFY_LEFT" font="Graphics.FONT_LARGE" />
-        <label id="info"        x="10"  y="60%" color="Graphics.COLOR_BLACK" justification="Graphics.TEXT_JUSTIFY_LEFT" font="Graphics.FONT_TINY" />
+        <label id="value"
+            x="10" y="5"
+            color="Graphics.COLOR_BLACK"
+            justification="Graphics.TEXT_JUSTIFY_LEFT"
+            font="Graphics.FONT_NUMBER_HOT" />
+        <label id="unitLabel"
+            x="98%" y="5"
+            text="@Strings.unitLabel"
+            color="Graphics.COLOR_BLACK"
+            justification="Graphics.TEXT_JUSTIFY_RIGHT"
+            font="Graphics.FONT_LARGE" />
+        <label id="info"
+            x="5" y="50"
+            color="Graphics.COLOR_BLACK"
+            justification="Graphics.TEXT_JUSTIFY_LEFT"
+            font="Graphics.FONT_TINY" />
     </layout>
+
+    <!--Layout without info for areas < 65px height -->
+    <layout id="SlimLayout">
+        <drawable class="Background" />
+        <label id="value"
+            x="10" y="5"
+            color="Graphics.COLOR_BLACK"
+            justification="Graphics.TEXT_JUSTIFY_LEFT"
+            font="Graphics.FONT_NUMBER_HOT" />
+        <label id="unitLabel"
+            x="98%" y="5"
+            text="@Strings.unitLabel"
+            color="Graphics.COLOR_BLACK"
+            justification="Graphics.TEXT_JUSTIFY_RIGHT"
+            font="Graphics.FONT_LARGE" />
+    </layout>
+
+    <!-- Layout for small (half width) areas -->
+    <layout id="HalfLayout">
+        <drawable class="Background" />
+        <label id="value"
+            x="10" y="5"
+            color="Graphics.COLOR_BLACK"
+            justification="Graphics.TEXT_JUSTIFY_LEFT"
+            font="Graphics.FONT_LARGE" />
+        <label id="unitLabel"
+            x="98%" y="5"
+            text="@Strings.unitLabel"
+            color="Graphics.COLOR_BLACK"
+            justification="Graphics.TEXT_JUSTIFY_RIGHT"
+            font="Graphics.FONT_TINY" />
+    </layout>
+
+
 </layouts>

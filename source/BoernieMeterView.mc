@@ -3,11 +3,9 @@ import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.WatchUi;
 using Toybox.UserProfile as User;
+using Toybox.Application.Properties as Props;
 
 const BOERNIE_CONST = 3.375f;
-const CNT_HYSTERESIS = 5;
-const UPPER_THRES = 1.1;
-const LOWER_THRES = 0.95;
 
 class BoernieMeterView extends WatchUi.DataField{
     hidden var curBoernie as Float;
@@ -40,13 +38,24 @@ class BoernieMeterView extends WatchUi.DataField{
     // Set your layout here. Anytime the size of obscurity of
     // the draw context is changed this will be called.
     function onLayout(dc as Dc) as Void {
-        View.setLayout(Rez.Layouts.MainLayout(dc));
+        System.println("on_layout" + dc.getWidth() + " x " + dc.getHeight() );
+        if(dc.getWidth() > 130){
+            if (dc.getHeight() > 65){
+                View.setLayout(Rez.Layouts.FullLayout(dc));
+            }
+            else {
+                View.setLayout(Rez.Layouts.SlimLayout(dc));
+            }
+        } else{
+            View.setLayout(Rez.Layouts.HalfLayout(dc));
+        }
+
         //var labelView = View.findDrawableById("unit_label") as Text;
         // labelView.locY = labelView.locY - 16;
-        var valueView = View.findDrawableById("value") as Text;
-        var infoView = View.findDrawableById("info") as Text;
-        infoView.locY = valueView.locY + 35;
-        (View.findDrawableById("unit_label") as Text).setText(Rez.Strings.unit_label);
+        // var valueView = View.findDrawableById("value") as Text;
+        // var infoView = View.findDrawableById("info") as Text;
+        // infoView.locY = valueView.locY + 45;
+        //(View.findDrawableById("unitLabel") as Text).setText(Rez.Strings.unit_label);
     }
 
 
@@ -56,17 +65,18 @@ class BoernieMeterView extends WatchUi.DataField{
     // guarantee that compute() will be called before onUpdate().
     function compute(info as Activity.Info) as Void {
 
-        if(! (info has :currentPower) ){    System.println("Need a Powermeter!");
+        if(! (info has :currentPower) ){
+            System.println("Need a Powermeter!");
             me.info = Rez.Strings.noPwrMeter;
-                    return;
+            return;
         }
-        
+
         if(info.currentPower != null){
             var pwr = info.currentPower as Float;
             pwr = pwr / me.userWeight;
             me.curBoernie = pwr / BOERNIE_CONST;
         }
-        
+
         updateCounters();
     }
 
@@ -79,7 +89,7 @@ class BoernieMeterView extends WatchUi.DataField{
                     var toneProfile =
                     [
                         new Attention.ToneProfile( 2500, 250),
-                        new Attention.ToneProfile( 5000, 350),
+                        new Attention.ToneProfile( 5000, 450),
                         new Attention.ToneProfile( 2500, 250)
                     ];
                     Attention.playTone({:toneProfile=>toneProfile});
@@ -92,17 +102,17 @@ class BoernieMeterView extends WatchUi.DataField{
     }
 
     function updateCounters(){
-        if(me.curBoernie > UPPER_THRES){
+        if(me.curBoernie > Props.getValue("hThres")){
             aboveCnt += 1;
             belowCnt = 0;
-            if(aboveCnt >= CNT_HYSTERESIS){
+            if(aboveCnt >= Props.getValue("hysteresisCnt")){
                 alarm(true);
             }
         }
-        if (me.curBoernie < LOWER_THRES){
+        if (me.curBoernie < Props.getValue("lThres")){
             belowCnt += 1;
             aboveCnt = 0;
-            if(belowCnt >= CNT_HYSTERESIS){
+            if(belowCnt >= Props.getValue("hysteresisCnt")){
                 alarm(false);
             }
         }
@@ -115,22 +125,24 @@ class BoernieMeterView extends WatchUi.DataField{
         // Set the background color
         (View.findDrawableById("Background") as Text).setColor(getBackgroundColor());
 
-        var infolabel = View.findDrawableById("info") as Text;
-        infolabel.setText(me.info);
+                // Determine Color for value and info
+        var foregroundColor = (getBackgroundColor() == Graphics.COLOR_BLACK) ?
+            Graphics.COLOR_WHITE : Graphics.COLOR_BLACK;
+        foregroundColor = (me.alarmRaised) ?
+            Graphics.COLOR_RED : foregroundColor;
 
         // Set the foreground color and value
         var value = View.findDrawableById("value") as Text;
-        var foregroundColor = (getBackgroundColor() == Graphics.COLOR_BLACK) ? Graphics.COLOR_WHITE : Graphics.COLOR_BLACK;
-   
-        if (me.alarmRaised){
-            value.setColor(Graphics.COLOR_RED);
-            infolabel.setColor(Graphics.COLOR_RED);
-        }else{
-            value.setColor(foregroundColor);
+        value.setColor(foregroundColor);
+        value.setText(me.curBoernie.format("%.2f"));
+
+        // Update info text
+        var infolabel = View.findDrawableById("info") as Text;
+        if(infolabel != null && dc.getHeight() > 100){
+            infolabel.setText(me.info);
             infolabel.setColor(foregroundColor);
         }
 
-        value.setText(me.curBoernie.format("%.2f"));
         System.println(" update " + me.curBoernie.format("%.2f"));
         // Call parent's onUpdate(dc) to redraw the layout
         View.onUpdate(dc);

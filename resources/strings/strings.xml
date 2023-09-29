@@ -1,7 +1,18 @@
 <strings>
     <string id="AppName">BoernieMeter</string>
-    <string id="unit_label">[Bö]</string>
+    <string id="AppVersionTitle">Version</string>
+    <string id="unitLabel">[Bö]</string>
+
+    <string id="hysteresisLabel">Alarm Hysteresis</string>
+    <string id="hysteresisPrompt">time to trigger alarm [s]</string>
+
+    <string id="lThresLabel">Lower Threshold</string>
+    <string id="lThresPrompt">alarm counter reset</string>
+
+    <string id="hThresLabel">Upper Theshold</string>
+    <string id="hThresPrompt">alarm counter increment</string>
+
     <string id="noPwrMeter">"Need a Powermeter!"</string>
     <string id="noUsrWeight">"Need user weight!"</string>
-    <string id="almBoernieThresholdExceeded">"Go slower!"</string>
+    <string id="almBoernieThresholdExceeded">Slower, you are dropping Börnie!</string>
 </strings>

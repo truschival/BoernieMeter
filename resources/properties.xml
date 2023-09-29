@@ -1,0 +1,7 @@
+<properties>
+    <property id="appVersion" type="string">1.0.0</property>
+    <property id="hysteresisCnt" type="number">5</property>
+    <property id="lThres" type="float">0.95</property>
+    <property id="hThres" type="float">1.1</property>
+</properties>
+

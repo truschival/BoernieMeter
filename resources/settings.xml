@@ -1,0 +1,15 @@
+<settings>
+    <setting propertyKey="@Properties.appVersion" title="@Strings.AppVersionTitle">
+        <settingConfig type="alphaNumeric" readonly="true" />
+    </setting>
+
+    <setting propertyKey="@Properties.hysteresisCnt" title="@Strings.hysteresisLabel" prompt="@Strings.hysteresisPrompt">
+        <settingConfig  type="numeric" />
+    </setting>
+    <setting propertyKey="@Properties.lThres" title="@Strings.lThresLabel" prompt="@Strings.lThresPrompt">
+        <settingConfig type="numeric" min="0"  />
+    </setting>
+    <setting propertyKey="@Properties.hThres" title="@Strings.hThresLabel" prompt="@Strings.hThresPrompt">
+        <settingConfig type="numeric" min="0.3"/>
+    </setting>
+</settings>
