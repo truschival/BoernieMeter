@@ -38,7 +38,6 @@ class BoernieMeterView extends WatchUi.DataField{
     // Set your layout here. Anytime the size of obscurity of
     // the draw context is changed this will be called.
     function onLayout(dc as Dc) as Void {
-        System.println("on_layout" + dc.getWidth() + " x " + dc.getHeight() );
         if(dc.getWidth() > 130){
             if (dc.getHeight() > 65){
                 View.setLayout(Rez.Layouts.FullLayout(dc));
