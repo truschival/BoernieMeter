@@ -1,7 +1,7 @@
 <strings>
     <string id="AppName">BoernieMeter</string>
     <string id="AppVersionTitle">Version</string>
-    <string id="unitLabel">[Bö]</string>
+    <string id="unitLabel">[øBö]</string>
 
     <string id="hysteresisLabel">Alarm Hysteresis</string>
     <string id="hysteresisPrompt">time to trigger alarm [s]</string>
