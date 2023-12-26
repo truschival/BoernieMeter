@@ -6,10 +6,16 @@ using Toybox.UserProfile as User;
 using Toybox.Application.Properties as Props;
 
 const BOERNIE_CONST = 3.375f;
+const WINDOW_SIZE = 3;
 
 class BoernieMeterView extends WatchUi.DataField{
-    hidden var curBoernie as Float;
     hidden var userWeight as Float;
+
+    hidden var curBoernie as Float;
+
+    hidden var avgBoernie3s as Float = 0.0;
+    hidden var valWindow = new Array<Float>[WINDOW_SIZE];
+    hidden var windowIdx as Number = 0;
 
     hidden var aboveCnt as Number;
     hidden var belowCnt as Number;
@@ -24,6 +30,12 @@ class BoernieMeterView extends WatchUi.DataField{
         me.belowCnt = 0;
         me.info = Rez.Strings.AppName;
         me.alarmRaised = false;
+
+        var idx = 0;
+        while (idx < me.valWindow.size()){
+            me.valWindow[idx] = 0.0f;
+            idx +=1;
+        }
 
         // User weight in kg
         me.userWeight = (User.getProfile().weight as Float)/1000.0;
@@ -74,8 +86,28 @@ class BoernieMeterView extends WatchUi.DataField{
             var pwr = info.currentPower as Float;
             pwr = pwr / me.userWeight;
             me.curBoernie = pwr / BOERNIE_CONST;
+            
+            me.windowIdx = updateWindow(me.curBoernie, me.windowIdx, me.valWindow);
+            me.avgBoernie3s = arrayMean(me.valWindow);
         }
         updateCounters();
+    }
+
+
+    function updateWindow(val as Float, index as Number, window as Array<Float>){
+        window[index] = val;
+        return (index + 1)% WINDOW_SIZE;
+    }
+
+
+    function arrayMean(arr as Array<Number>){
+        var i = 1;
+        var sum = arr[0];
+        while(i < arr.size()){
+            sum += arr[i];
+            i++;
+        }
+        return sum/arr.size();
     }
 
     function alarm(alm as Boolean){
@@ -132,7 +164,7 @@ class BoernieMeterView extends WatchUi.DataField{
         // Set the foreground color and value
         var value = View.findDrawableById("value") as Text;
         value.setColor(foregroundColor);
-        value.setText(me.curBoernie.format("%.2f"));
+        value.setText(me.avgBoernie3s.format("%.2f"));
 
         // Update info text
         var infolabel = View.findDrawableById("info") as Text;

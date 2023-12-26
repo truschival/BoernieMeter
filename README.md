@@ -29,3 +29,17 @@ threshold (default 0.95 Bö)
   Börnie-Rating.
 
 * Datafield Alert - for acustic alarms.
+
+## Changelog
+
+### v1.0.0 Initial version
+
+Shows current boernie value for user weight and raises alarms if threshold is 
+exceeded for given hysteresis.
+
+- configrurable tresholds and hysteresis length
+
+### v1.1.0 Average Boernies
+
+Do not display current boernie value but average across 3s to avoid 
+fluctuation of displayed value.
